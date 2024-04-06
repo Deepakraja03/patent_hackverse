@@ -1,23 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import '@rainbow-me/rainbowkit/styles.css';
+
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+
+import {
+  getDefaultConfig,
+  RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
+import { WagmiProvider } from 'wagmi';
+import {
+  polygonMumbai,
+  xdcTestnet,
+  sepolia,
+} from 'wagmi/chains';
+import {
+  QueryClientProvider,
+  QueryClient,
+} from "@tanstack/react-query";
+import Home from './pages/Home';
+import Navbar from './component/Navbar';
+import CreatePatent from './pages/CreatePatent';
+import Patents from './pages/Patents';
+
+const config = getDefaultConfig({
+  appName: 'Patent',
+  projectId: 'YOUR_PROJECT_ID',
+  chains: [polygonMumbai, xdcTestnet, sepolia],
+  ssr: true, // If your dApp uses server side rendering (SSR)
+});
+
+const queryClient = new QueryClient();
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+         <RainbowKitProvider>
+           <Router>
+            <Navbar />
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/Createpatent' element={<CreatePatent />} />
+              <Route path='/Patents' element={<Patents />} />
+            </Routes>
+           </Router>
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
     </div>
   );
 }
