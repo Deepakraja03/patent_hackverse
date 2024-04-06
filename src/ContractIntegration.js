@@ -3,7 +3,7 @@ import Pat from './contract/nft.json';
 import { ethers } from "ethers";
 import Web3 from "web3";
 
-const PATENT_CONTRACT = "0xDbe0dC00A7C9C10C7A75f8F1167949bb49a313Cd";
+const PATENT_CONTRACT = "0x52552eF4F19A745c53cc4993bC42FB23Fe506c21";
 
 const isBrowser = () => typeof window !== "undefined";
 const { ethereum } = isBrowser();
@@ -46,7 +46,7 @@ export const GETPATENTSBYOWNER =async (addr) => {
     }
 }
 
-export const GETALLPATENTS =async () => {
+export const GETALLLEASEAVAILABLEPAT =async () => {
     try {
         const provider = 
         window.ethereum != null
@@ -55,7 +55,7 @@ export const GETALLPATENTS =async () => {
     
         const signer = provider.getSigner();
         const Role = new ethers.Contract(PATENT_CONTRACT, Pat, signer);
-        const answer = await Role.getAllPatents();
+        const answer = await Role.getLeaseAvailablePatents();
         return answer;
     } catch (error) {
         console.error('Error fetching memo:', error);
@@ -93,4 +93,40 @@ export const GETPATENTBYID =async (id) => {
         console.error('Error fetching memo:', error);
     }
 }
+
+
+export const PAYLEASEFEEANDMINT =async (id, fee) => {
+    try {
+        const provider = 
+        window.ethereum != null
+          ? new ethers.providers.Web3Provider(window.ethereum)
+          : ethers.providers.getDefaultProvider();
+    
+        const signer = provider.getSigner();
+        const Role = new ethers.Contract(PATENT_CONTRACT, Pat, signer);
+        const answer = await Role.payLeaseFeeAndMintNFT(id, {
+            value: fee
+        });
+        return answer;
+    } catch (error) {
+        console.error('Error fetching memo:', error);
+    }
+}
+
+export const ENDLEASE =async (id) => {
+    try {
+        const provider = 
+        window.ethereum != null
+          ? new ethers.providers.Web3Provider(window.ethereum)
+          : ethers.providers.getDefaultProvider();
+    
+        const signer = provider.getSigner();
+        const Role = new ethers.Contract(PATENT_CONTRACT, Pat, signer);
+        const answer = await Role.burnNFT(id);
+        return answer;
+    } catch (error) {
+        console.error('Error fetching memo:', error);
+    }
+}
+
 

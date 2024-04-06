@@ -35,6 +35,7 @@ contract PatentLending is ERC721 {
     event PatentLeased(uint256 id, address leaser, uint256 leaseEndTime, uint256 tokenId);
     event LeaseEnded(uint256 id);
     event EscrowClaimed(uint256 id, uint256 amount);
+    event PatentBurned(uint256 id, uint256 tokenId);
 
     modifier leaseNotExpired(uint256 _id) {
         require(patents[_id].leaseEndTime > block.timestamp, "Lease period is over");
@@ -76,6 +77,7 @@ contract PatentLending is ERC721 {
 
         patents[_id].leaseFee = _leaseFee;
         patents[_id].leaseDuration = _leaseDuration;
+        patents[_id].leaseEndTime = block.timestamp + _leaseDuration;
 
         emit PatentLeased(_id, msg.sender, patents[_id].leaseEndTime, patents[_id].tokenId);
     }
@@ -86,7 +88,6 @@ contract PatentLending is ERC721 {
         require(msg.value == patents[_id].leaseFee, "Incorrect lease fee amount");
         require(patents[_id].currentLeaser == address(0), "Patent already leased");
 
-        patents[_id].leaseEndTime = block.timestamp + patents[_id].leaseDuration;
         patents[_id].currentLeaser = msg.sender;
         patents[_id].escrowAmount += msg.value;
 
@@ -102,15 +103,15 @@ contract PatentLending is ERC721 {
         require(patentExists[_id], "Patent does not exist");
         require(msg.sender == patents[_id].owner || msg.sender == patents[_id].currentLeaser, "Not authorized to end lease");
 
-        _burn(patents[_id].tokenId); // Burn the associated NFT
-
+        _burn(patents[_id].tokenId);
+        patents[_id].tokenId = 0; 
         patents[_id].currentLeaser = address(0);
         patents[_id].leaseFee = 0;
         patents[_id].leaseDuration = 0;
         patents[_id].leaseEndTime = 0;
-        patents[_id].tokenId = 0; // Reset tokenId
 
         emit LeaseEnded(_id);
+        emit PatentBurned(_id, patents[_id].tokenId);
     }
 
     function claimEscrow(uint256 _id) external {
@@ -132,12 +133,81 @@ contract PatentLending is ERC721 {
         return patentsByLeaser[_leaser];
     }
 
-    function getPatentDetails(uint256 _id) external view returns (string memory, string memory, uint256) {
+    function getPatentDetails(uint256 _id) external view returns (uint256, string memory, string memory, uint256) {
         require(patentExists[_id], "Patent does not exist");
-        return (patents[_id].details.name, patents[_id].details.description, patents[_id].details.timestamp);
+        return (_id, patents[_id].details.name, patents[_id].details.description, patents[_id].details.timestamp);
     }
 
     function getAllPatents() external view returns (Patent[] memory) {
         return patents;
+    }
+
+    struct PatentInfo {
+        uint256 id;
+        TupleDetails details;
+        uint256 leaseFee;
+        uint256 leaseDuration;
+        uint256 leaseEndTime;
+        address currentLeaser;
+        uint256 escrowAmount;
+        uint256 tokenId;
+    }
+
+    function getPatentsByOwnerDetails(address _owner) external view returns (PatentInfo[] memory) {
+        uint256[] memory ownedPatents = patentsByOwner[_owner];
+        PatentInfo[] memory result = new PatentInfo[](ownedPatents.length);
+        for (uint256 i = 0; i < ownedPatents.length; i++) {
+            Patent storage patent = patents[ownedPatents[i]];
+            result[i] = PatentInfo({
+                id: patent.id,
+                details: patent.details,
+                leaseFee: patent.leaseFee,
+                leaseDuration: patent.leaseDuration,
+                leaseEndTime: patent.leaseEndTime,
+                currentLeaser: patent.currentLeaser,
+                escrowAmount: patent.escrowAmount,
+                tokenId: patent.tokenId
+            });
+        }
+        return result;
+    }
+
+    function getLeaseAvailablePatents() external view returns (PatentInfo[] memory) {
+        uint256[] memory availablePatents = new uint256[](patents.length);
+        uint256 count = 0;
+        for (uint256 i = 0; i < patents.length; i++) {
+            if (patents[i].leaseEndTime <= block.timestamp || patents[i].currentLeaser == address(0)) {
+                availablePatents[count] = i;
+                count++;
+            }
+        }
+        PatentInfo[] memory result = new PatentInfo[](count);
+        for (uint256 j = 0; j < count; j++) {
+            Patent storage patent = patents[availablePatents[j]];
+            result[j] = PatentInfo({
+                id: patent.id,
+                details: patent.details,
+                leaseFee: patent.leaseFee,
+                leaseDuration: patent.leaseDuration,
+                leaseEndTime: patent.leaseEndTime,
+                currentLeaser: patent.currentLeaser,
+                escrowAmount: patent.escrowAmount,
+                tokenId: patent.tokenId
+            });
+        }
+        return result;
+    }
+
+    function burnNFT(uint256 _id) external {
+        require(patentExists[_id], "Patent does not exist");
+        require(msg.sender == patents[_id].owner, "Only owner can burn NFT");
+        _burn(patents[_id].tokenId);
+        patents[_id].tokenId = 0; 
+        patents[_id].currentLeaser = address(0);
+        patents[_id].leaseFee = 0;
+        patents[_id].leaseDuration = 0;
+        patents[_id].leaseEndTime = 0;
+
+        emit PatentBurned(_id, patents[_id].tokenId);
     }
 }

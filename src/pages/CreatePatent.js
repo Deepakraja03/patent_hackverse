@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CREATEPATENT, GETPATENTBYID, GETPATENTSBYOWNER, LEASEPATENT } from '../ContractIntegration';
+import { CREATEPATENT, ENDLEASE, GETPATENTBYID, GETPATENTSBYOWNER, LEASEPATENT } from '../ContractIntegration';
 import { ethers } from "ethers";
 
 function CreatePatent() {
@@ -64,6 +64,11 @@ function CreatePatent() {
         console.log("Lease", result);
     }
 
+    const OnBurn = async (id) => {
+        const result = await ENDLEASE(id);
+        console.log("lease end", result);
+    }
+
     const closeModal = () => {
         setSelectedPatent(null);
         setShowModal(false);
@@ -90,7 +95,7 @@ function CreatePatent() {
                                 <div>Name: {item[1][0]}</div>
                                 <div>Description: {item[1][1]}</div>
                                 <div>Timestamp: {new Date(parseInt(item[1][2]) * 1000).toLocaleString()}</div>
-                                <div>Description: {item[1][1]}</div>
+                                {/* <div>Description: {item[1][1]}</div> */}
                                 <button onClick={() => onButton(parseInt(item[0]))}>Lease</button>
                             </div>
                         ))
@@ -116,6 +121,30 @@ function CreatePatent() {
                     </div>
                 </div>
             )}
+            <br />
+            <div>
+                Burn NFT
+                <div>
+                    <div>
+                        {loading ? (
+                            <div>Loading...</div>
+                        ) : (
+                            patent.map((item, index) => (
+                                <div key={index}>
+                                    <div>Name: {item[1][0]}</div>
+                                    <div>Description: {item[1][1]}</div>
+                                    <div>Timestamp: {new Date(parseInt(item[1][2]) * 1000).toLocaleString()}</div>
+                                    <div>Current Leaser: {item.currentLeaser}</div>
+                                    <div>Lease Duration: {parseInt(item.leaseDuration)}</div>
+                                    <div>Lease End Time: {new Date(parseInt(item.leaseEndTime) * 1000).toLocaleString()}</div>
+                                    <div>Token Id: {parseInt(item.tokenId)}</div>
+                                    <button onClick={() => OnBurn(parseInt(item[0]))}>Burn</button>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

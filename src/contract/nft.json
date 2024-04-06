@@ -25,6 +25,19 @@
 				"type": "uint256"
 			}
 		],
+		"name": "burnNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
 		"name": "claimEscrow",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -273,6 +286,25 @@
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "PatentBurned",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -588,6 +620,78 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "getLeaseAvailablePatents",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestamp",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct PatentLending.TupleDetails",
+						"name": "details",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leaseFee",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leaseDuration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leaseEndTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "currentLeaser",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "escrowAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct PatentLending.PatentInfo[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -697,6 +801,36 @@
 						"internalType": "struct PatentLending.TupleDetails",
 						"name": "details",
 						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leaseFee",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leaseDuration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "leaseEndTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "currentLeaser",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "escrowAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct PatentLending.PatentInfo[]",
