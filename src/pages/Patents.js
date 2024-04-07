@@ -26,24 +26,27 @@ function Patents() {
     }
 
     return (
-        <div>
+        <div className="container bg-gradient-to-r from-black hover:text-black via-slate-900 to-slate-800 mx-auto mt-8">
+            <h2 className="text-4xl font-bold pb-4 text-white text-center">Available Patents</h2>
             {patent.length > 0 ? (
-                <div>
-                   {patent.map((patent, index) => (
-                <div key={index}>
-                    <div>Patent ID: {parseInt(patent[0])}</div>
-                    {/* <div>Owner: {patent[1]}</div> */}
-                    <div>Name: {patent[1][0]}</div>
-                    <div>Description: {patent[1][1]}</div>
-                    <div>Timestamp: {new Date(parseInt(patent[1][2]._hex) * 1000).toLocaleString()}</div>
-                    <div>Lease Fee: {parseInt(patent.leaseFee)}</div>
-                    <div>Lease Duration: {parseInt(patent.leaseDuration)}</div>
-                    <button onClick={() => {LeaseandMint(parseInt(patent[0]),parseInt(patent.leaseFee))}}>Lease it</button>
-                </div>
-            ))}
+                <div className="flex flex-col items-center justify-center gap-5 p-3">
+                    {patent.map((patentItem, index) => (
+                        <div key={index} className="bg-slate-300  w-[80%] shadow-lg border flex flex-col items-center rounded-lg overflow-hidden">
+                            <div className="p-4">
+                                <div className="text-xl font-semibold mb-2">Patent ID: {parseInt(patentItem[0])}</div>
+                                {/* <div>Owner: {patent[1]}</div> */}
+                                <div className="text-lg mb-2">Name: {patentItem[1][0]}</div>
+                                <div className="text-lg mb-2">Description: {patentItem[1][1]}</div>
+                                <div className="text-sm mb-2">Timestamp: {new Date(parseInt(patentItem[1][2]._hex)).toLocaleString()}</div>
+                                <div className="text-lg mb-2">Lease Fee: {parseInt(patentItem.leaseFee)}</div>
+                                <div className="text-lg mb-2">Lease Duration: {parseInt(patentItem.leaseDuration)}</div>
+                                <button onClick={() => { LeaseandMint(parseInt(patentItem[0]), parseInt(patentItem.leaseFee)) }} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Lease it</button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ) : (
-                <div>No patents available</div>
+                <div className="text-center">No patents available</div>
             )}
         </div>
     );
