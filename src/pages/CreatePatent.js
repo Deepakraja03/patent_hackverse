@@ -95,7 +95,7 @@ function CreatePatent() {
                             <div>Loading...</div>
                         ) : (
                             patent.length === 0 ? (
-                                <div>No patents available</div>
+                                <div className='text-white'>No patents available</div>
                             ) : (
                                 patent.map((item, index) => (
                                     <div key={index} className="bg-gray-100  w-[100%] min-h-[60%] rounded-lg my-5 mx-20 p-6">
@@ -133,10 +133,10 @@ function CreatePatent() {
                     <h2 className="text-6xl font-bold my-16 px-4 text-white flex items-center justify-center font-serif">Burn NFT</h2>
                     <div className='flex gap-3 mx-10'>
                         {loading ? (
-                            <div>Loading...</div>
+                            <div className='text-white'>Loading...</div>
                         ) : (
                             patent.length === 0 ? (
-                                <div>No patents available</div>
+                                <div className='text-white'>No patents available</div>
                             ) : (
                                 patent.map((item, index) => (
                                     <div key={index} className=" bg-gray-100  w-[100%] min-h-[60%] rounded-lg my-5 mx-20 p-4">

@@ -4,12 +4,12 @@ import Web3 from "web3";
 
 // Contract addresses for both networks
 const PATENT_CONTRACT_ADDRESSES = {
-    80001: "0xE0a89ECdBe5aB30E117A20BD4A69b9eB7Be11A02", // Polygon Mumbai (Matic)
-    50: "0x9F64d4aa85aacF2107583FF41401A2f6F958e7fe",  // XinFin XDC
+    80001: "0x07709362d6Ae3B7706b92d2cfe81b7511c28aB75", // Polygon Mumbai (Matic)
+    50: "0xEc074938e610B2E7e1946F920f329BC7f99834d5",  // XinFin XDC
 };
 
 // Contract address used for initialization (default)
-const DEFAULT_PATENT_CONTRACT = "0xE0a89ECdBe5aB30E117A20BD4A69b9eB7Be11A02";
+const DEFAULT_PATENT_CONTRACT = "0x07709362d6Ae3B7706b92d2cfe81b7511c28aB75";
 
 const isBrowser = () => typeof window !== "undefined";
 const { ethereum } = isBrowser();
