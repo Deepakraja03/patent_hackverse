@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.main{
+    width: 100%;
+    height: 100vh;
+}
+
+
+
+.inputflex{
+    top: 1;
+    display: flex;
+    
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.content{
+    top: 1;
+    display: flex;  
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    
+
+}

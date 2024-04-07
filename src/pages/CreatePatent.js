@@ -73,39 +73,72 @@ function CreatePatent() {
         setSelectedPatent(null);
         setShowModal(false);
     }
+
     return (
-        <div>
-            <div>
-                <input type='text' placeholder='Enter the Patent Name' value={name} onChange={(e) => { setName(e.target.value) }} />
-                <input type='text' placeholder='Enter the Patent Description' value={desc} onChange={(e) => { setDesc(e.target.value) }} />
-                <button onClick={createPatent}>
-                    Create
-                </button>
-            </div>
-            <div>
-                <div>
-                    Your Patents:
+        <div className="container mx-auto mt-8">
+            <div className="mb-8">
+                <h2 className="text-2xl font-semibold mb-2">Create Patent</h2>
+                <div className="flex justify-center gap-2 items-center">
+                    <input className="border-black border-2 rounded-full p-2 font-semibold" type='text' placeholder='Enter the Patent Name' value={name} onChange={(e) => { setName(e.target.value) }} />
+                    <input className="border-black border-2 rounded-full p-2 font-semibold" type='text' placeholder='Enter the Patent Description' value={desc} onChange={(e) => { setDesc(e.target.value) }} />
                 </div>
+                <div className="mt-4 flex justify-center">
+                    <button onClick={createPatent} type="button" className="transition ease-in-out delay-150 hover:scale-110 duration-300 text-white bg-green-700 hover:bg-green-800 px-4 py-1 font-semibold rounded-full dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-red-900">Create</button>
+                </div>
+            </div>
+
+            <div className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4">Your Patents</h2>
                 <div>
                     {loading ? (
                         <div>Loading...</div>
                     ) : (
-                        patent.map((item, index) => (
-                            <div key={index}>
-                                <div>Name: {item[1][0]}</div>
-                                <div>Description: {item[1][1]}</div>
-                                <div>Timestamp: {new Date(parseInt(item[1][2]) * 1000).toLocaleString()}</div>
-                                {/* <div>Description: {item[1][1]}</div> */}
-                                <button onClick={() => onButton(parseInt(item[0]))}>Lease</button>
-                            </div>
-                        ))
+                        patent.length === 0 ? (
+                            <div>No patents available</div>
+                        ) : (
+                            patent.map((item, index) => (
+                                <div key={index} className="bg-gray-100 p-4 rounded-md mb-4">
+                                    <div>Name: {item[1][0]}</div>
+                                    <div>Description: {item[1][1]}</div>
+                                    <div>Timestamp: {new Date(parseInt(item[1][2]) * 1000).toLocaleString()}</div>
+                                    <button onClick={() => onButton(parseInt(item[0]))} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Lease</button>
+                                </div>
+                            ))
+                        )
                     )}
                 </div>
             </div>
+
+            <div>
+                <h2 className="text-2xl font-semibold mb-4">Burn NFT</h2>
+                <div>
+                    {loading ? (
+                        <div>Loading...</div>
+                    ) : (
+                        patent.length === 0 ? (
+                            <div>No patents available</div>
+                        ) : (
+                            patent.map((item, index) => (
+                                <div key={index} className="bg-gray-100 p-4 rounded-md mb-4">
+                                    <div>Name: {item[1][0]}</div>
+                                    <div>Description: {item[1][1]}</div>
+                                    <div>Timestamp: {new Date(parseInt(item[1][2]) * 1000).toLocaleString()}</div>
+                                    <div>Current Leaser: {item.currentLeaser}</div>
+                                    <div>Lease Duration: {parseInt(item.leaseDuration)}</div>
+                                    <div>Lease End Time: {new Date(parseInt(item.leaseEndTime) * 1000).toLocaleString()}</div>
+                                    <div>Token Id: {parseInt(item.tokenId)}</div>
+                                    <button onClick={() => OnBurn(parseInt(item[0]))} className="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Burn</button>
+                                </div>
+                            ))
+                        )
+                    )}
+                </div>
+            </div>
+
             {/* Modal */}
             {showModal && (
                 <div className="modal">
-                    <div className="modal-content">
+                    <div className="modal-content ">
                         <span className="close" onClick={closeModal}>&times;</span>
                         <h2>Patent Details</h2>
                         <p>Name: {selectedPatent[1]}</p>
@@ -114,37 +147,11 @@ function CreatePatent() {
                         <div>
                             <input type='number' placeholder='Enter the Lease Fee' value={fee} onChange={(e) => { setFee(e.target.value) }} />
                             <input type='number' placeholder='Enter the Lease Duration' value={duration} onChange={(e) => { setDuration(e.target.value) }} />
-                            <button onClick={() => {leasePatent(parseInt(selectedPatent[0]))}}>
-                                Confirm
-                            </button>
+                            <button onClick={() => {leasePatent(parseInt(selectedPatent[0]))}}>Confirm</button>
                         </div>
                     </div>
                 </div>
             )}
-            <br />
-            <div>
-                Burn NFT
-                <div>
-                    <div>
-                        {loading ? (
-                            <div>Loading...</div>
-                        ) : (
-                            patent.map((item, index) => (
-                                <div key={index}>
-                                    <div>Name: {item[1][0]}</div>
-                                    <div>Description: {item[1][1]}</div>
-                                    <div>Timestamp: {new Date(parseInt(item[1][2]) * 1000).toLocaleString()}</div>
-                                    <div>Current Leaser: {item.currentLeaser}</div>
-                                    <div>Lease Duration: {parseInt(item.leaseDuration)}</div>
-                                    <div>Lease End Time: {new Date(parseInt(item.leaseEndTime) * 1000).toLocaleString()}</div>
-                                    <div>Token Id: {parseInt(item.tokenId)}</div>
-                                    <button onClick={() => OnBurn(parseInt(item[0]))}>Burn</button>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
