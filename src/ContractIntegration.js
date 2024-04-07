@@ -9,7 +9,7 @@ const PATENT_CONTRACT_ADDRESSES = {
 };
 
 // Contract address used for initialization (default)
-const DEFAULT_PATENT_CONTRACT = "0x07709362d6Ae3B7706b92d2cfe81b7511c28aB75";
+const DEFAULT_PATENT_CONTRACT = "0x52552eF4F19A745c53cc4993bC42FB23Fe506c21";
 
 const isBrowser = () => typeof window !== "undefined";
 const { ethereum } = isBrowser();

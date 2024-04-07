@@ -91,13 +91,9 @@ function CreatePatent() {
                 <div className="mb-8 flex flex-col justify-center items-center my-20">
                     <h2 className="text-6xl font-bold my-16 px-4 text-white flex items-center justify-center font-serif ">Your Patents</h2>
                     <div className='flex gap-3 mx-10'>
-                        {loading ? (
-                            <div>Loading...</div>
-                        ) : (
-                            patent.length === 0 ? (
-                                <div className='text-white'>No patents available</div>
-                            ) : (
-                                patent.map((item, index) => (
+                        {!loading && patent && patent.length > 0 && (
+                            patent.map((item, index) => (
+                                item && item[1] && item[1].length >= 3 ? (
                                     <div key={index} className="bg-gray-100  w-[100%] min-h-[60%] rounded-lg my-5 mx-20 p-6">
                                         <div className=' flex flex-col justify-center items-cenetr min-w-60 min-h-52'>
                                             <div className='text-2xl font-semibold'><span className=''>Name:</span> {item[1][0]}</div>
@@ -106,9 +102,13 @@ function CreatePatent() {
                                             <button onClick={() => onButton(parseInt(item[0]))} className="mt-4 px-4 py-4 bg-gradient-to-r from-sky-400 to-blue-500 font-semibold text-xl text-white rounded-md hover:bg-blue-600">Lease</button>
                                         </div>
                                     </div>
-                                ))
-                            )
+                                ) : null
+                            ))
                         )}
+                        {!loading && patent && patent.length === 0 && (
+                            <div className='text-white'>No patents available</div>
+                        )}
+                        {loading && <div>Loading...</div>}
                     </div>
                 </div>
 
@@ -132,13 +132,9 @@ function CreatePatent() {
                 <div className='flex flex-col justify-center items-center'>
                     <h2 className="text-6xl font-bold my-16 px-4 text-white flex items-center justify-center font-serif">Burn NFT</h2>
                     <div className='flex gap-3 mx-10'>
-                        {loading ? (
-                            <div className='text-white'>Loading...</div>
-                        ) : (
-                            patent.length === 0 ? (
-                                <div className='text-white'>No patents available</div>
-                            ) : (
-                                patent.map((item, index) => (
+                        {!loading && patent && patent.length > 0 && (
+                            patent.map((item, index) => (
+                                item && item[1] && item[1].length >= 3 ? (
                                     <div key={index} className=" bg-gray-100  w-[100%] min-h-[60%] rounded-lg my-5 mx-20 p-4">
                                         <div className='flex flex-col justify-center items-cenetr min-w-60 min-h-52'>
                                             <div  className='text-2xl font-semibold'><span>Name:</span> {item[1][0]}</div>
@@ -159,9 +155,13 @@ function CreatePatent() {
                                             <button onClick={() => OnBurn(parseInt(item[0]))} className="mt-4 px-4 py-4 bg-gradient-to-r  font-semibold text-xl  from-rose-500 via-red-400 to-red-500 text-white rounded-md hover:bg-red-600">Burn</button>
                                         </div>
                                     </div>
-                                ))
-                            )
+                                ) : null
+                            ))
                         )}
+                        {!loading && patent && patent.length === 0 && (
+                            <div className='text-white'>No patents available</div>
+                        )}
+                        {loading && <div>Loading...</div>}
                     </div>
                 </div>
             </div>
